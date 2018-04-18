@@ -62,6 +62,11 @@ func resourceVm() *schema.Resource {
 				Required:    true,
 				Description: "Id of the VM template to use. Either 'template_name' or 'template_id' is required",
 			},
+			"cpu": {
+					Type:        schema.TypeInt,
+					Required:    true,
+					Description: "CPU count of the VM instance",
+			},
 			"permissions": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -134,7 +139,7 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		d.Get("template_id"),
 		d.Get("name"),
 		false,
-		"",
+		fmt.Sprintf("CPU=%v", d.Get("cpu")),
 		false,
 	)
 	if err != nil {
