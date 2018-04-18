@@ -20,6 +20,7 @@ type UserVm struct {
 	Permissions *Permissions `xml:"PERMISSIONS"`
 	State       int          `xml:"STATE"`
 	LcmState    int          `xml:"LCM_STATE"`
+	Cpu         int          `xml:"CPU"`
 	VmTemplate  *VmTemplate  `xml:"TEMPLATE"`
 }
 
@@ -219,6 +220,7 @@ func resourceVmRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("gname", vm.Gname)
 	d.Set("state", vm.State)
 	d.Set("lcmstate", vm.LcmState)
+	d.Set("cpu", vm.Cpu)
 	d.Set("ip", vm.VmTemplate.Context.IP)
 	d.Set("permissions", permissionString(vm.Permissions))
 
