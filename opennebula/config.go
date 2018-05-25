@@ -1,8 +1,9 @@
 package opennebula
 
 import (
-	"github.com/megamsys/opennebula-go/api"
 	"log"
+
+	"github.com/megamsys/opennebula-go/api"
 )
 
 type Config struct {

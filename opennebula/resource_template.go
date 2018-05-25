@@ -3,10 +3,11 @@ package opennebula
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"strconv"
 	"strings"
+
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 type UserTemplates struct {

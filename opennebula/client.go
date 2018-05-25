@@ -2,9 +2,10 @@ package opennebula
 
 import (
 	"fmt"
-	"github.com/kolo/xmlrpc"
 	"log"
 	"strconv"
+
+	"github.com/kolo/xmlrpc"
 )
 
 type Client struct {

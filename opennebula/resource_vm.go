@@ -3,11 +3,12 @@ package opennebula
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 type UserVm struct {
@@ -21,6 +22,8 @@ type UserVm struct {
 	State       int          `xml:"STATE"`
 	LcmState    int          `xml:"LCM_STATE"`
 	Cpu         int          `xml:"CPU"`
+	Vcpu        int          `xml:"VCPU"`
+	Memory      int          `xml:"MEMORY"`
 	VmTemplate  *VmTemplate  `xml:"TEMPLATE"`
 }
 
@@ -30,10 +33,26 @@ type UserVms struct {
 
 type VmTemplate struct {
 	Context *Context `xml:"CONTEXT"`
+	Nic     *Nic     `xml:"NIC"`
+	Disk    *Disk    `xml:"DISK"`
 }
 
 type Context struct {
 	IP string `xml:"ETH0_IP"`
+}
+
+type Nic struct {
+	Network             string `xml:"NETWORK"`
+	NetworkUname        string `xml:"NETWORK_UNAME"`
+	NetworkSearchDomain string `xml:"SEARCH_DOMAIN"`
+	SecurityGroupId     int    `xml:"SECURITY_GROUPS"`
+}
+
+type Disk struct {
+	Image       string `xml:"IMAGE"`
+	Size        int    `xml:"SIZE"`
+	ImageDriver string `xml:"IMAGE_DRIVER"`
+	ImageUname  string `xml:"IMAGE_UNAME"`
 }
 
 func resourceVm() *schema.Resource {
@@ -64,9 +83,59 @@ func resourceVm() *schema.Resource {
 				Description: "Id of the VM template to use. Either 'template_name' or 'template_id' is required",
 			},
 			"cpu": {
-					Type:        schema.TypeInt,
-					Required:    true,
-					Description: "CPU count of the VM instance",
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "CPU count of the VM instance",
+			},
+			"vcpu": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "VCPU count of the VM instance",
+			},
+			"memory": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "Memory in MB",
+			},
+			"image": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Name",
+			},
+			"image_uname": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Owner",
+			},
+			"image_driver": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Driver",
+			},
+			"size": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "VM Size in MB",
+			},
+			"network": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Name",
+			},
+			"network_uname": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Owner",
+			},
+			"network_search_domain": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Search Domain",
+			},
+			"security_group_id": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "Security Group ID",
 			},
 			"permissions": {
 				Type:        schema.TypeString,
@@ -140,7 +209,20 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		d.Get("template_id"),
 		d.Get("name"),
 		false,
-		fmt.Sprintf("CPU=%v", d.Get("cpu")),
+		fmt.Sprintf("CPU = \"%d\"\nVCPU = \"%d\"\nMEMORY = \"%d\"\n "+
+			"DISK=[\n  IMAGE=\"%s\",\n  SIZE=\"%d\",\n  IMAGE_UNAME=\"%s\",\n  DRIVER=\"%s\"]\n"+
+			"NIC=[\n  NETWORK=\"%s\",\n  NETWORK_UNAME=\"%s\",\n  SEARCH_DOMAIN=\"%s\",\n  SECURITY_GROUP=\"%d\"]",
+			d.Get("cpu"),
+			d.Get("vcpu"),
+			d.Get("memory"),
+			d.Get("image"),
+			d.Get("size"),
+			d.Get("image_uname"),
+			d.Get("image_driver"),
+			d.Get("network"),
+			d.Get("network_uname"),
+			d.Get("network_search_domain"),
+			d.Get("security_group_id")),
 		false,
 	)
 	if err != nil {
@@ -221,6 +303,16 @@ func resourceVmRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("state", vm.State)
 	d.Set("lcmstate", vm.LcmState)
 	d.Set("cpu", vm.Cpu)
+	d.Set("vcpu", vm.Vcpu)
+	d.Set("memory", vm.Memory)
+	d.Set("image", vm.VmTemplate.Disk.Image)
+	d.Set("size", vm.VmTemplate.Disk.Size)
+	d.Set("image_driver", vm.VmTemplate.Disk.ImageDriver)
+	d.Set("image_uname", vm.VmTemplate.Disk.ImageUname)
+	d.Set("network_uname", vm.VmTemplate.Nic.NetworkUname)
+	d.Set("network_search_domain", vm.VmTemplate.Nic.NetworkSearchDomain)
+	d.Set("security_group_id", vm.VmTemplate.Nic.SecurityGroupId)
+	d.Set("network", vm.VmTemplate.Nic.Network)
 	d.Set("ip", vm.VmTemplate.Context.IP)
 	d.Set("permissions", permissionString(vm.Permissions))
 
