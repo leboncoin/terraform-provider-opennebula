@@ -21,9 +21,6 @@ type UserVm struct {
 	Permissions *Permissions `xml:"PERMISSIONS"`
 	State       int          `xml:"STATE"`
 	LcmState    int          `xml:"LCM_STATE"`
-	Cpu         int          `xml:"CPU"`
-	Vcpu        int          `xml:"VCPU"`
-	Memory      int          `xml:"MEMORY"`
 	VmTemplate  *VmTemplate  `xml:"TEMPLATE"`
 }
 
@@ -34,7 +31,10 @@ type UserVms struct {
 type VmTemplate struct {
 	Context *Context `xml:"CONTEXT"`
 	Nic     *Nic     `xml:"NIC"`
-	Disk    *Disk    `xml:"DISK"`
+  Disk    *Disk    `xml:"DISK"`
+  Cpu     int      `xml:"CPU"`
+	Vcpu    int      `xml:"VCPU"`
+	Memory  int      `xml:"MEMORY"`
 }
 
 type Context struct {
@@ -51,7 +51,7 @@ type Nic struct {
 type Disk struct {
 	Image       string `xml:"IMAGE"`
 	Size        int    `xml:"SIZE"`
-	ImageDriver string `xml:"IMAGE_DRIVER"`
+	ImageDriver string `xml:"DRIVER"`
 	ImageUname  string `xml:"IMAGE_UNAME"`
 }
 
@@ -302,9 +302,9 @@ func resourceVmRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("gname", vm.Gname)
 	d.Set("state", vm.State)
 	d.Set("lcmstate", vm.LcmState)
-	d.Set("cpu", vm.Cpu)
-	d.Set("vcpu", vm.Vcpu)
-	d.Set("memory", vm.Memory)
+	d.Set("cpu", vm.VmTemplate.Cpu)
+	d.Set("vcpu", vm.VmTemplate.Vcpu)
+	d.Set("memory", vm.VmTemplate.Memory)
 	d.Set("image", vm.VmTemplate.Disk.Image)
 	d.Set("size", vm.VmTemplate.Disk.Size)
 	d.Set("image_driver", vm.VmTemplate.Disk.ImageDriver)
@@ -338,8 +338,45 @@ func resourceVmUpdate(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 		log.Printf("[INFO] Successfully updated VM %s\n", resp)
-	} else {
-		log.Printf("[INFO] Sorry, only 'permissions' updates are supported at the moment.")
+	}
+
+	if d.HasChange("cpu") {
+		resp, err := client.Call(
+			"one.vm.resize",
+			intId(d.Id()),
+			fmt.Sprintf("CPU = \"%d\"", d.Get("cpu")),
+			false,
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
+	}
+
+	if d.HasChange("vcpu") {
+		resp, err := client.Call(
+			"one.vm.resize",
+			intId(d.Id()),
+			fmt.Sprintf("VCPU = \"%d\"", d.Get("vcpu")),
+			false,
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
+	}
+
+	if d.HasChange("memory") {
+		resp, err := client.Call(
+			"one.vm.resize",
+			intId(d.Id()),
+			fmt.Sprintf("MEMORY = \"%d\"", d.Get("memory")),
+			false,
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
 	}
 
 	return nil
