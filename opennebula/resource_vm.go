@@ -31,8 +31,8 @@ type UserVms struct {
 type VmTemplate struct {
 	Context *Context `xml:"CONTEXT"`
 	Nic     *Nic     `xml:"NIC"`
-  Disk    *Disk    `xml:"DISK"`
-  Cpu     int      `xml:"CPU"`
+	Disk    *Disk    `xml:"DISK"`
+	Cpu     int      `xml:"CPU"`
 	Vcpu    int      `xml:"VCPU"`
 	Memory  int      `xml:"MEMORY"`
 }
@@ -340,38 +340,12 @@ func resourceVmUpdate(d *schema.ResourceData, meta interface{}) error {
 		log.Printf("[INFO] Successfully updated VM %s\n", resp)
 	}
 
-	if d.HasChange("cpu") {
+	if d.HasChange("size") {
 		resp, err := client.Call(
-			"one.vm.resize",
+			"one.vm.diskresize",
 			intId(d.Id()),
-			fmt.Sprintf("CPU = \"%d\"", d.Get("cpu")),
-			false,
-		)
-		if err != nil {
-			return err
-		}
-		log.Printf("[INFO] Successfully updated VM %s\n", resp)
-	}
-
-	if d.HasChange("vcpu") {
-		resp, err := client.Call(
-			"one.vm.resize",
-			intId(d.Id()),
-			fmt.Sprintf("VCPU = \"%d\"", d.Get("vcpu")),
-			false,
-		)
-		if err != nil {
-			return err
-		}
-		log.Printf("[INFO] Successfully updated VM %s\n", resp)
-	}
-
-	if d.HasChange("memory") {
-		resp, err := client.Call(
-			"one.vm.resize",
-			intId(d.Id()),
-			fmt.Sprintf("MEMORY = \"%d\"", d.Get("memory")),
-			false,
+			0,
+			fmt.Sprintf("%d", d.Get("size").(int)),
 		)
 		if err != nil {
 			return err
