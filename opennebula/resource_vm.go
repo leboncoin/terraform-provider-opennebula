@@ -351,6 +351,18 @@ func resourceVmUpdate(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 		log.Printf("[INFO] Successfully updated VM %s\n", resp)
+  }
+
+  if d.HasChange("name") {
+		resp, err := client.Call(
+			"one.vm.rename",
+			intId(d.Id()),
+			fmt.Sprintf("%s", d.Get("name").(string)),
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
 	}
 
 	return nil
