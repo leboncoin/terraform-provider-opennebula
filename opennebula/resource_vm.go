@@ -125,6 +125,12 @@ func resourceVm() *schema.Resource {
 				Required:    true,
 				Description: "Network Name",
 			},
+			"ip": {
+				Type:        schema.TypeString,
+        Optional:    true,
+        Computed:    true,
+				Description: "Optional IP Addr. for Network",
+			},
 			"network_uname": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -185,11 +191,6 @@ func resourceVm() *schema.Resource {
 				Computed:    true,
 				Description: "Name of the group that will own the VM",
 			},
-			"ip": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "IP address that is assigned to the VM",
-			},
 			"state": {
 				Type:        schema.TypeInt,
 				Computed:    true,
@@ -214,7 +215,7 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		false,
 		fmt.Sprintf("CPU = \"%d\"\nVCPU = \"%d\"\nMEMORY = \"%d\"\n "+
 			"DISK=[\n  IMAGE=\"%s\",\n  SIZE=\"%d\",\n  IMAGE_UNAME=\"%s\",\n  DRIVER=\"%s\"]\n"+
-			"NIC=[\n  NETWORK=\"%s\",\n  NETWORK_UNAME=\"%s\",\n  SEARCH_DOMAIN=\"%s\",\n  SECURITY_GROUP=\"%d\"]",
+			"NIC=[\n  NETWORK=\"%s\",\n  NETWORK_UNAME=\"%s\",\n  SEARCH_DOMAIN=\"%s\",\n  SECURITY_GROUP=\"%d\",\n  IP=\"%s\"]",
 			d.Get("cpu"),
 			d.Get("vcpu"),
 			d.Get("memory"),
@@ -225,7 +226,8 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 			d.Get("network"),
 			d.Get("network_uname"),
 			d.Get("network_search_domain"),
-			d.Get("security_group_id")),
+      d.Get("security_group_id"),
+      d.Get("ip")),
 		false,
 	)
 	if err != nil {
