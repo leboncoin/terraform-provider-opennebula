@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
@@ -127,9 +128,30 @@ func resourceVm() *schema.Resource {
 			},
 			"ip": {
 				Type:        schema.TypeString,
-        Optional:    true,
-        Computed:    true,
+				Optional:    true,
+				Computed:    true,
 				Description: "Optional IP Addr. for Network",
+				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
+					value := v.(string)
+
+					// todo: maybe better error msgs
+
+					parts := strings.Split(value, ".")
+					if len(parts) < 4 {
+						errors = append(errors, fmt.Errorf("%q doesn't consists of four octets", k))
+					}
+
+					for _, x := range parts {
+						if i, err := strconv.Atoi(x); err == nil {
+							if i < 0 || i > 255 {
+								errors = append(errors, fmt.Errorf("%q octets are not in a valid range ", k))
+							}
+						} else {
+							errors = append(errors, fmt.Errorf("%q not an valid ip format", k)) //todo: error msg
+						}
+					}
+					return
+				},
 			},
 			"network_uname": {
 				Type:        schema.TypeString,
@@ -226,8 +248,8 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 			d.Get("network"),
 			d.Get("network_uname"),
 			d.Get("network_search_domain"),
-      d.Get("security_group_id"),
-      d.Get("ip")),
+			d.Get("security_group_id"),
+			d.Get("ip")),
 		false,
 	)
 	if err != nil {
