@@ -14,8 +14,14 @@ The vm resource has been updated to work like other terraform providers/resource
 
 ## EXAMPLE
 
-See [example](example/) folder for a quick overview
+See [example](example/) folder for a quick overview  
 TODO: Add examples for every resource and describe them better...
+
+## NOTES ABOUT UPDATING RESOURCES
+
+To update vm resources the VM has to be in state poweroff.
+This applies to resizing disk and adding/removing cpu/vcpu/memory.
+TODO: Maybe implement update functions for cpu/vcpu/memory like disk already and restart manually? or force restart (dangerous)? or require new ressources...
 
 
 ## ROADMAP
