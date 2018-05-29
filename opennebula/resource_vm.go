@@ -129,7 +129,8 @@ func resourceVm() *schema.Resource {
 			"ip": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Computed:    true,
+        Computed:    true,
+        ForceNew:    true,
 				Description: "Optional IP Addr. for Network",
 				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
 					value := v.(string)
