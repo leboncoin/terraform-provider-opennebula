@@ -19,10 +19,12 @@ TODO: Add examples for every resource and describe them better...
 
 ## NOTES ABOUT UPDATING RESOURCES
 
-To update vm resources the VM has to be in state poweroff.
-This applies to resizing disk and adding/removing cpu/vcpu/memory.
-TODO: Maybe implement update functions for cpu/vcpu/memory like disk already and restart manually? or force restart (dangerous)? or require new ressources...
+To update some vm resources the VM has to be in state poweroff.
 
+Current flow:  
+* resize disk: disk will be resized but vm won't be restarted
+* resize cpu/vcpu/memory: requires new resource
+* change ip address: requires new resource 
 
 ## ROADMAP
 
