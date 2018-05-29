@@ -85,16 +85,19 @@ func resourceVm() *schema.Resource {
 			"cpu": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "CPU count of the VM instance",
 			},
 			"vcpu": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "VCPU count of the VM instance",
 			},
 			"memory": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Memory in MB",
 			},
 			"image": {
@@ -351,9 +354,9 @@ func resourceVmUpdate(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 		log.Printf("[INFO] Successfully updated VM %s\n", resp)
-  }
+	}
 
-  if d.HasChange("name") {
+	if d.HasChange("name") {
 		resp, err := client.Call(
 			"one.vm.rename",
 			intId(d.Id()),
