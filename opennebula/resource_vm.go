@@ -235,12 +235,25 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		"one.template.instantiate",
 		d.Get("template_id"),
 		d.Get("name"),
-		false,
-		fmt.Sprintf("CPU = \"%d\"\nVCPU = \"%d\"\nMEMORY = \"%d\"\n "+
-			"DISK=[\n  IMAGE=\"%s\",\n  SIZE=\"%d\",\n  IMAGE_UNAME=\"%s\",\n  DRIVER=\"%s\"]\n"+
-			"NIC=[\n  NETWORK=\"%s\",\n  NETWORK_UNAME=\"%s\",\n  SEARCH_DOMAIN=\"%s\",\n  SECURITY_GROUP=\"%d\",\n  IP=\"%s\"]",
-			d.Get("cpu"),
-			d.Get("vcpu"),
+    false,
+    //todo: maybe use backticks
+		fmt.Sprintf(
+      "CPU = \"%d\"\n"+
+      "VCPU = \"%d\"\n"+
+      "MEMORY = \"%d\"\n "+
+      "DISK=[\n"+
+      "  IMAGE=\"%s\",\n"+
+      "  SIZE=\"%d\",\n"+
+      "  IMAGE_UNAME=\"%s\",\n"+
+      "  DRIVER=\"%s\"]\n"+
+      "NIC=[\n"+
+      "  NETWORK=\"%s\",\n"+
+      "  NETWORK_UNAME=\"%s\",\n"+
+      "  SEARCH_DOMAIN=\"%s\",\n"+
+      "  SECURITY_GROUP=\"%d\",\n"+
+      "  IP=\"%s\"]",
+      d.Get("cpu"), 
+      d.Get("vcpu"),
 			d.Get("memory"),
 			d.Get("image"),
 			d.Get("size"),
