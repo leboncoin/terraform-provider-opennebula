@@ -5,7 +5,7 @@ data "opennebula_template_id" "base" {
 resource "opennebula_vm" "vm-base" {
   count                 = "1"                                      # required | count of instances to create
   name                  = "MyVM"                                   # required | custom name of the vm to create
-  template_id           = "${data.opennebula_template_id.test.id}" # required | template_id to use. can be data source callback
+  template_id           = "${data.opennebula_template_id.base.id}" # required | template_id to use. can be data source callback
   permissions           = "640"                                    # required | permissions for the vm (unix-style)
   cpu                   = "1"                                      # required | cpu count 
   vcpu                  = "1"                                      # required | vcpu count
