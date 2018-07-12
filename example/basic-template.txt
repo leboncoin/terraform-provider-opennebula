@@ -1,0 +1,17 @@
+# This Template could be rendered by resource_template or just uploaded to opennebula via the webui
+# It provides a minimal definition for Virtual Machines. Other values are defined via the resource_vm and its properties.
+# See vm.tf for an example
+
+CONTEXT = [
+  NETWORK = "YES",
+  SSH_PUBLIC_KEY = "$USER[SSH_PUBLIC_KEY]" ]
+DESCRIPTION = "Managed by Terraform"
+GRAPHICS = [
+  KEYMAP = "de",
+  LISTEN = "0.0.0.0",
+  TYPE = "VNC" ]
+HYPERVISOR = "kvm"
+MEMORY_UNIT_COST = "MB"
+OS = [
+  ARCH = "x86_64",
+  BOOT = "" ]

@@ -3,11 +3,13 @@ package opennebula
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 type UserVm struct {
@@ -20,7 +22,6 @@ type UserVm struct {
 	Permissions *Permissions `xml:"PERMISSIONS"`
 	State       int          `xml:"STATE"`
 	LcmState    int          `xml:"LCM_STATE"`
-	Cpu         int          `xml:"CPU"`
 	VmTemplate  *VmTemplate  `xml:"TEMPLATE"`
 }
 
@@ -30,10 +31,29 @@ type UserVms struct {
 
 type VmTemplate struct {
 	Context *Context `xml:"CONTEXT"`
+	Nic     *Nic     `xml:"NIC"`
+	Disk    *Disk    `xml:"DISK"`
+	Cpu     int      `xml:"CPU"`
+	Vcpu    int      `xml:"VCPU"`
+	Memory  int      `xml:"MEMORY"`
 }
 
 type Context struct {
 	IP string `xml:"ETH0_IP"`
+}
+
+type Nic struct {
+	Network             string `xml:"NETWORK"`
+	NetworkUname        string `xml:"NETWORK_UNAME"`
+	NetworkSearchDomain string `xml:"SEARCH_DOMAIN"`
+	SecurityGroupId     int    `xml:"SECURITY_GROUPS"`
+}
+
+type Disk struct {
+	Image       string `xml:"IMAGE"`
+	Size        int    `xml:"SIZE"`
+	ImageDriver string `xml:"DRIVER"`
+	ImageUname  string `xml:"IMAGE_UNAME"`
 }
 
 func resourceVm() *schema.Resource {
@@ -64,9 +84,90 @@ func resourceVm() *schema.Resource {
 				Description: "Id of the VM template to use. Either 'template_name' or 'template_id' is required",
 			},
 			"cpu": {
-					Type:        schema.TypeInt,
-					Required:    true,
-					Description: "CPU count of the VM instance",
+				Type:        schema.TypeInt,
+				Required:    true,
+				ForceNew:    true,
+				Description: "CPU count of the VM instance",
+			},
+			"vcpu": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				ForceNew:    true,
+				Description: "VCPU count of the VM instance",
+			},
+			"memory": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Memory in MB",
+			},
+			"image": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Name",
+			},
+			"image_uname": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Owner",
+			},
+			"image_driver": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Image Driver",
+			},
+			"size": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "VM Size in MB",
+			},
+			"network": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Name",
+			},
+			"ip": {
+				Type:        schema.TypeString,
+				Optional:    true,
+        Computed:    true,
+        ForceNew:    true,
+				Description: "Optional IP Addr. for Network",
+				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
+					value := v.(string)
+
+					// todo: maybe better error msgs
+
+					parts := strings.Split(value, ".")
+					if len(parts) < 4 {
+						errors = append(errors, fmt.Errorf("%q doesn't consists of four octets", k))
+					}
+
+					for _, x := range parts {
+						if i, err := strconv.Atoi(x); err == nil {
+							if i < 0 || i > 255 {
+								errors = append(errors, fmt.Errorf("%q octets are not in a valid range ", k))
+							}
+						} else {
+							errors = append(errors, fmt.Errorf("%q not an valid ip format", k)) //todo: error msg
+						}
+					}
+					return
+				},
+			},
+			"network_uname": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Owner",
+			},
+			"network_search_domain": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Network Search Domain",
+			},
+			"security_group_id": {
+				Type:        schema.TypeInt,
+				Required:    true,
+				Description: "Security Group ID",
 			},
 			"permissions": {
 				Type:        schema.TypeString,
@@ -113,11 +214,6 @@ func resourceVm() *schema.Resource {
 				Computed:    true,
 				Description: "Name of the group that will own the VM",
 			},
-			"ip": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "IP address that is assigned to the VM",
-			},
 			"state": {
 				Type:        schema.TypeInt,
 				Computed:    true,
@@ -139,8 +235,35 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		"one.template.instantiate",
 		d.Get("template_id"),
 		d.Get("name"),
-		false,
-		fmt.Sprintf("CPU=%v", d.Get("cpu")),
+    false,
+    //todo: maybe use backticks
+		fmt.Sprintf(
+      "CPU = \"%d\"\n"+
+      "VCPU = \"%d\"\n"+
+      "MEMORY = \"%d\"\n "+
+      "DISK=[\n"+
+      "  IMAGE=\"%s\",\n"+
+      "  SIZE=\"%d\",\n"+
+      "  IMAGE_UNAME=\"%s\",\n"+
+      "  DRIVER=\"%s\"]\n"+
+      "NIC=[\n"+
+      "  NETWORK=\"%s\",\n"+
+      "  NETWORK_UNAME=\"%s\",\n"+
+      "  SEARCH_DOMAIN=\"%s\",\n"+
+      "  SECURITY_GROUP=\"%d\",\n"+
+      "  IP=\"%s\"]",
+      d.Get("cpu"), 
+      d.Get("vcpu"),
+			d.Get("memory"),
+			d.Get("image"),
+			d.Get("size"),
+			d.Get("image_uname"),
+			d.Get("image_driver"),
+			d.Get("network"),
+			d.Get("network_uname"),
+			d.Get("network_search_domain"),
+			d.Get("security_group_id"),
+			d.Get("ip")),
 		false,
 	)
 	if err != nil {
@@ -220,7 +343,17 @@ func resourceVmRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("gname", vm.Gname)
 	d.Set("state", vm.State)
 	d.Set("lcmstate", vm.LcmState)
-	d.Set("cpu", vm.Cpu)
+	d.Set("cpu", vm.VmTemplate.Cpu)
+	d.Set("vcpu", vm.VmTemplate.Vcpu)
+	d.Set("memory", vm.VmTemplate.Memory)
+	d.Set("image", vm.VmTemplate.Disk.Image)
+	d.Set("size", vm.VmTemplate.Disk.Size)
+	d.Set("image_driver", vm.VmTemplate.Disk.ImageDriver)
+	d.Set("image_uname", vm.VmTemplate.Disk.ImageUname)
+	d.Set("network_uname", vm.VmTemplate.Nic.NetworkUname)
+	d.Set("network_search_domain", vm.VmTemplate.Nic.NetworkSearchDomain)
+	d.Set("security_group_id", vm.VmTemplate.Nic.SecurityGroupId)
+	d.Set("network", vm.VmTemplate.Nic.Network)
 	d.Set("ip", vm.VmTemplate.Context.IP)
 	d.Set("permissions", permissionString(vm.Permissions))
 
@@ -246,8 +379,31 @@ func resourceVmUpdate(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 		log.Printf("[INFO] Successfully updated VM %s\n", resp)
-	} else {
-		log.Printf("[INFO] Sorry, only 'permissions' updates are supported at the moment.")
+	}
+
+	if d.HasChange("size") {
+		resp, err := client.Call(
+			"one.vm.diskresize",
+			intId(d.Id()),
+			0,
+			fmt.Sprintf("%d", d.Get("size").(int)),
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
+	}
+
+	if d.HasChange("name") {
+		resp, err := client.Call(
+			"one.vm.rename",
+			intId(d.Id()),
+			fmt.Sprintf("%s", d.Get("name").(string)),
+		)
+		if err != nil {
+			return err
+		}
+		log.Printf("[INFO] Successfully updated VM %s\n", resp)
 	}
 
 	return nil

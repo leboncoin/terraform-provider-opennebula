@@ -35,6 +35,10 @@ func Provider() terraform.ResourceProvider {
 			"opennebula_image":    resourceImage(),
 		},
 
+		DataSourcesMap: map[string]*schema.Resource{
+			"opennebula_template_id": dataSourceOpennebulaTemplateId(),
+		},
+
 		ConfigureFunc: providerConfigure,
 	}
 }

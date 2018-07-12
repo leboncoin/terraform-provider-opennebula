@@ -3,11 +3,12 @@ package opennebula
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"net"
 	"strconv"
 	"strings"
+
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 type UserVnets struct {
@@ -121,7 +122,8 @@ func resourceVnetCreate(d *schema.ResourceData, meta interface{}) error {
 	// Create base object
 	resp, err := client.Call(
 		"one.vn.allocate",
-		fmt.Sprintf("NAME = \"%s\"\n", d.Get("name").(string))+d.Get("description").(string)+"\nBRIDGE="+d.Get("bridge").(string),
+		fmt.Sprintf("NAME = \"%s\"\n",
+			d.Get("name").(string))+d.Get("description").(string)+"\nBRIDGE="+d.Get("bridge").(string),
 		-1,
 	)
 	if err != nil {
