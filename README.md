@@ -1,9 +1,24 @@
 # terraform-provider-opennebula
-[![Powered by Immowelt](https://img.shields.io/badge/powered%20by-immowelt-yellow.svg?colorB=ffb200)](https://stackshare.io/immowelt-group/) 
-## This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) Provider
+[![Powered by Immowelt](https://img.shields.io/badge/powered%20by-immowelt-yellow.svg?colorB=ffb200)](https://stackshare.io/immowelt-group/)  
+
+### This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) Provider
+
 Forked from [Runtastics Provider](https://github.com/runtastic/terraform-provider-opennebula.)
 * Leverages [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) 
 * Tested for versions 5.X
+
+Table of Contents
+=================
+* [terraform-provider-opennebula](#terraform-provider-opennebula)
+  * [Table of Contents](#table-of-contents)
+    * [Examples](#examples)
+    * [Currently implemented](#currently-implemented)
+    * [ToDo](#todo)
+    * [Notes](#notes)
+    * [Maintainer](#maintainer)
+    * [Collaborators](#collaborators)
+    * [Contributing](#contributing)
+    * [License](#license)
 
 ## Examples
 
@@ -44,13 +59,15 @@ Current flow:
 * change ip address: requires new resource 
 
 
-## Collaborators
+## Maintainer
 
 - [Immowelt Group](https://github.com/immoweltgroup)
   - [Cemal Acar](https://github.com/cacar)
   - [Dennis Kribl](https://github.com/dkribl)
+  - [Leroy Förster](https://github.com/gersilex)
   
-  
+## Collaborators
+
 - [Lorenzo Arribas](https://github.com/larribas)
 - [Jason Tevnan](https://github.com/tnosaj)
 
