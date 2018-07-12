@@ -5,10 +5,13 @@
 
 Forked from [Runtastics Provider](https://github.com/runtastic/terraform-provider-opennebula.)
 * Leverages [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) 
-* Tested for versions 5.X
+* Tested for versions 5.X  
+  
+    
 
-Table of Contents
-=================
+
+## Table of Contents
+
 * [terraform-provider-opennebula](#terraform-provider-opennebula)
   * [Table of Contents](#table-of-contents)
     * [Examples](#examples)
