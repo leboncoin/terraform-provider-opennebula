@@ -129,8 +129,8 @@ func resourceVm() *schema.Resource {
 			"ip": {
 				Type:        schema.TypeString,
 				Optional:    true,
-        Computed:    true,
-        ForceNew:    true,
+				Computed:    true,
+				ForceNew:    true,
 				Description: "Optional IP Addr. for Network",
 				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
 					value := v.(string)
@@ -235,25 +235,25 @@ func resourceVmCreate(d *schema.ResourceData, meta interface{}) error {
 		"one.template.instantiate",
 		d.Get("template_id"),
 		d.Get("name"),
-    false,
-    //todo: maybe use backticks
+		false,
+		//todo: maybe use backticks
 		fmt.Sprintf(
-      "CPU = \"%d\"\n"+
-      "VCPU = \"%d\"\n"+
-      "MEMORY = \"%d\"\n "+
-      "DISK=[\n"+
-      "  IMAGE=\"%s\",\n"+
-      "  SIZE=\"%d\",\n"+
-      "  IMAGE_UNAME=\"%s\",\n"+
-      "  DRIVER=\"%s\"]\n"+
-      "NIC=[\n"+
-      "  NETWORK=\"%s\",\n"+
-      "  NETWORK_UNAME=\"%s\",\n"+
-      "  SEARCH_DOMAIN=\"%s\",\n"+
-      "  SECURITY_GROUP=\"%d\",\n"+
-      "  IP=\"%s\"]",
-      d.Get("cpu"), 
-      d.Get("vcpu"),
+			"CPU = \"%d\"\n"+
+				"VCPU = \"%d\"\n"+
+				"MEMORY = \"%d\"\n "+
+				"DISK=[\n"+
+				"  IMAGE=\"%s\",\n"+
+				"  SIZE=\"%d\",\n"+
+				"  IMAGE_UNAME=\"%s\",\n"+
+				"  DRIVER=\"%s\"]\n"+
+				"NIC=[\n"+
+				"  NETWORK=\"%s\",\n"+
+				"  NETWORK_UNAME=\"%s\",\n"+
+				"  SEARCH_DOMAIN=\"%s\",\n"+
+				"  SECURITY_GROUP=\"%d\",\n"+
+				"  IP=\"%s\"]",
+			d.Get("cpu"),
+			d.Get("vcpu"),
 			d.Get("memory"),
 			d.Get("image"),
 			d.Get("size"),
