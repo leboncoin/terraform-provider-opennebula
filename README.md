@@ -1,27 +1,22 @@
 # terraform-provider-opennebula
 [![Powered by Immowelt](https://img.shields.io/badge/powered%20by-immowelt-yellow.svg?colorB=ffb200)](https://stackshare.io/immowelt-group/)  
-
-### This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) Provider
-
-Forked from [Runtastics Provider](https://github.com/runtastic/terraform-provider-opennebula.)
-* Leverages [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) 
-* Tested for versions 5.X  
-  
     
 
-
 ## Table of Contents
+  * [About](#about)
+  * [Examples](#examples)
+  * [Currently implemented](#currently-implemented)
+  * [ToDo](#todo)
+  * [Notes](#notes)
+  * [Maintainer](#maintainer)
+  * [Collaborators](#collaborators)
+  * [Contributing](#contributing)
+  * [License](#license)
 
-* [terraform-provider-opennebula](#terraform-provider-opennebula)
-  * [Table of Contents](#table-of-contents)
-    * [Examples](#examples)
-    * [Currently implemented](#currently-implemented)
-    * [ToDo](#todo)
-    * [Notes](#notes)
-    * [Maintainer](#maintainer)
-    * [Collaborators](#collaborators)
-    * [Contributing](#contributing)
-    * [License](#license)
+## About
+This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) provider forked from [Runtastic](https://github.com/runtastic/terraform-provider-opennebula.)
+
+It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) and is tested for versions 5.x
 
 ## Examples
 
@@ -71,6 +66,7 @@ Current flow:
   
 ## Collaborators
 
+- [Runtastic](https://github.com/runtastic)
 - [Lorenzo Arribas](https://github.com/larribas)
 - [Jason Tevnan](https://github.com/tnosaj)
 
