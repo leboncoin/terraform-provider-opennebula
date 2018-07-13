@@ -14,22 +14,24 @@
   * [License](#license)
 
 ## About
-This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) provider forked from [Runtastic](https://github.com/runtastic/terraform-provider-opennebula.)
+This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) provider forked from [Runtastic](https://github.com/runtastic/terraform-provider-opennebula)
 
 It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) and is tested for versions 5.x
 
 ## Examples
 
-See [example](example/) folder for a quick overview 
+See the [example](example/) folder for a quick overview 
 
-## Currently implemented
+## Currently implemented  
 
-The following list represent's all of OpenNebula's resources reachable through their API. The checked items are the ones that are fully functional and tested:
-
+### Resources
 * [X] [onevm](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onevm)
 * [X] [onetemplate](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onetemplate)
 * [X] [onevnet](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onevnet)
-* [X] [oneimage](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#oneimage)
+* [X] [oneimage](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#oneimage)  
+
+### Data Sources  
+* [X] template_id - Get the first template id by a template name
 
 ## ToDo
 * [ ]  Better examples of all modules
