@@ -1,6 +1,6 @@
 # terraform-provider-opennebula
 [![Powered by Immowelt](https://img.shields.io/badge/powered%20by-immowelt-yellow.svg?colorB=ffb200)](https://stackshare.io/immowelt-group/)  
-    
+
 
 ## Table of Contents
   * [About](#about)
@@ -20,17 +20,17 @@ It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/inte
 
 ## Examples
 
-See the [example](example/) folder for a quick overview 
+See the [example](example/) folder for a quick overview
 
-## Currently implemented  
+## Currently implemented
 
 ### Resources
 * [X] [onevm](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onevm)
 * [X] [onetemplate](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onetemplate)
 * [X] [onevnet](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#onevnet)
-* [X] [oneimage](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#oneimage)  
+* [X] [oneimage](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html#oneimage)
 
-### Data Sources  
+### Data Sources
 * [X] template_id - Get the first template id by a template name
 
 ## ToDo
@@ -51,12 +51,9 @@ See the [example](example/) folder for a quick overview
 
 ## Notes
 
-To update some vm resources the VM has to be in state poweroff.
-
-Current flow:  
-* resize disk: disk will be resized but vm won't be restarted
-* resize cpu/vcpu/memory: requires new resource
-* change ip address: requires new resource 
+* Regresion:
+  - disabled disk resize
+  - disabled resource NIC
 
 
 ## Maintainer
@@ -65,7 +62,7 @@ Current flow:
   - [Cemal Acar](https://github.com/cacar)
   - [Dennis Kribl](https://github.com/dkribl)
   - [Leroy Förster](https://github.com/gersilex)
-  
+
 ## Collaborators
 
 - [Runtastic](https://github.com/runtastic)
@@ -76,7 +73,7 @@ Current flow:
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/immoweltgroup/terraform-provider-opennebula. This project is
+https://github.com/leboncoin/terraform-provider-opennebula. This project is
 intended to be a safe, welcoming space for collaboration, and contributors are
 expected to adhere to the
 [Contributor Covenant](http://contributor-covenant.org) code of conduct.
