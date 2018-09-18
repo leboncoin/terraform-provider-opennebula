@@ -1,6 +1,4 @@
 # terraform-provider-opennebula
-[![Powered by Immowelt](https://img.shields.io/badge/powered%20by-immowelt-yellow.svg?colorB=ffb200)](https://stackshare.io/immowelt-group/)  
-
 
 ## Table of Contents
   * [About](#about)
@@ -14,9 +12,11 @@
   * [License](#license)
 
 ## About
-This is the official Immowelt Group [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) provider forked from [Runtastic](https://github.com/runtastic/terraform-provider-opennebula)
+This is the official leboncoin [OpenNebula](https://opennebula.org/) [Terraform](https://www.terraform.io/) provider forked from:
+  - [Runtastic](https://github.com/runtastic/terraform-provider-opennebula)
+  - [ImmoweltGroup](https://github.com/ImmoweltGroup/terraform-provider-opennebula)
 
-It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.2/integration/system_interfaces/api.html) and is tested for versions 5.x
+It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.6/integration/system_interfaces/api.html) and is tested for versions 5.x
 
 ## Examples
 
@@ -58,10 +58,8 @@ See the [example](example/) folder for a quick overview
 
 ## Maintainer
 
-- [Immowelt Group](https://github.com/immoweltgroup)
-  - [Cemal Acar](https://github.com/cacar)
-  - [Dennis Kribl](https://github.com/dkribl)
-  - [Leroy Förster](https://github.com/gersilex)
+- [leboncoin](https://github.com/leboncoin)
+  - [Andy Ladjadj](https://github.com/aladjadj)
 
 ## Collaborators
 
