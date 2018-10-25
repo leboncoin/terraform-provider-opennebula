@@ -29,4 +29,7 @@ test.go
 *.swp
 test
 
+dist/
+
 .vscode/
+.github_token
