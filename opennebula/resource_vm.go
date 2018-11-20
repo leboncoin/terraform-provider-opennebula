@@ -468,9 +468,9 @@ func resizeVm(d *schema.ResourceData, meta interface{}) (string, error) {
 		"one.vm.resize",
 		intId(d.Id()),
 		strings.Join([]string{
-			buildBaseAttribue(d, "cpu"),
-			buildBaseAttribue(d, "vcpu"),
-			buildBaseAttribue(d, "memory"),
+			buildBaseAttribute(d, "cpu"),
+			buildBaseAttribute(d, "vcpu"),
+			buildBaseAttribute(d, "memory"),
 		}, "\n"),
 		true)
 	if err != nil {
@@ -536,18 +536,18 @@ func buildUserTemplateAttributesString(d *schema.ResourceData) string {
 	disks, _ := m.ReadDiskFromConfig(d)
 	diskTpl := m.DisksTemplate(disks)
 	data := strings.Join([]string{
-		buildBaseAttribue(d, "labels"),
-		buildBaseAttribue(d, "cpu"),
-		buildBaseAttribue(d, "vcpu"),
-		buildBaseAttribue(d, "memory"),
+		buildBaseAttribute(d, "labels"),
+		buildBaseAttribute(d, "cpu"),
+		buildBaseAttribute(d, "vcpu"),
+		buildBaseAttribute(d, "memory"),
 		diskTpl}, "\n")
 	log.Printf(data)
 	return data
 }
 
-func buildBaseAttribue(d *schema.ResourceData, s string) string {
+func buildBaseAttribute(d *schema.ResourceData, s string) string {
 	if d.HasChange(s) {
-		return fmt.Sprintf("%s = \"%d\"", strings.ToUpper(s), d.Get(s))
+		return fmt.Sprintf("%s = \"%s\"", strings.ToUpper(s), d.Get(s))
 	}
 	return ""
 }
