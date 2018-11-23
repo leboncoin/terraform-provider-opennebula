@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"reflect"
 	"strings"
 	"time"
 
@@ -545,9 +546,18 @@ func buildUserTemplateAttributesString(d *schema.ResourceData) string {
 	return data
 }
 
-func buildBaseAttribute(d *schema.ResourceData, s string) string {
-	if d.HasChange(s) {
-		return fmt.Sprintf("%s = \"%s\"", strings.ToUpper(s), d.Get(s))
+func buildBaseAttribute(d *schema.ResourceData, key string) string {
+	if d.HasChange(key) {
+		value := d.Get(key)
+		return getBaseAttributeFromKeyValue(key, value)
 	}
 	return ""
+}
+
+func getBaseAttributeFromKeyValue(key string, value interface{}) string {
+	format := "%s = \"%d\""
+	if reflect.TypeOf(value).String() == "string" {
+		format = "%s = \"%s\""
+	}
+	return fmt.Sprintf(format, strings.ToUpper(key), value)
 }
