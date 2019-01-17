@@ -2,6 +2,7 @@
 
 ## Table of Contents
   * [About](#about)
+  * [Instalation](#installation)
   * [Examples](#examples)
   * [Currently implemented](#currently-implemented)
   * [ToDo](#todo)
@@ -17,6 +18,14 @@ This is the official leboncoin [OpenNebula](https://opennebula.org/) [Terraform]
   - [ImmoweltGroup](https://github.com/ImmoweltGroup/terraform-provider-opennebula)
 
 It leverages the [OpenNebula's XML/RPC API](https://docs.opennebula.org/5.6/integration/system_interfaces/api.html) and is tested for versions 5.x
+
+## Installation
+
+Download the latest release on [Github](https://github.com/leboncoin/terraform-provider-opennebula/releases)
+
+Untar your release binary on `~/.terraform.d/plugins` and rename with pattern `terraform-provider-opennebula_vX.Y.Z`
+
+For more information, follow the official procedure to install a [terraform plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins)
 
 ## Examples
 
