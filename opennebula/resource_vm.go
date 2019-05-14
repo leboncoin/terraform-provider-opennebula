@@ -78,6 +78,7 @@ func resourceVm() *schema.Resource {
 			"template_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Id of the VM template to use. Either 'template_name' or 'template_id' is required",
 			},
 			"cpu": {
